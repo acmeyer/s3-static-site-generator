@@ -219,12 +219,12 @@ puts "--------------------------------"
 print "Deploying distributions, this may take awhile (around 15 minutes)...."
 cloudfront.wait_until(:distribution_deployed, id: cloudfront_root_domain_resp.distribution.id) do |w|
   w.before_wait do |attempts, response|
-    loading 1000
+    loading 6000
   end
 end
 cloudfront.wait_until(:distribution_deployed, id: cloudfront_www_domain_resp.distribution.id) do |w|
   w.before_wait do |attempts, response|
-    loading 1000
+    loading 6000
   end
 end
 puts "\nDistributions deployed."
@@ -245,7 +245,7 @@ route53.change_resource_record_sets({
           alias_target: {
             dns_name: root_distribution_url,
             evaluate_target_health: false,
-            hosted_zone_id: hosted_zone_id,
+            hosted_zone_id: "Z2FDTNDATAQYW2", # always the same for CloudFront distributions
           },
           name: domain_name,
           type: "A",
@@ -273,11 +273,9 @@ puts "Finished configuration."
 puts "--------------------------------"
 
 puts "\n\n\n"
-puts "Finished setting up S3 static website hosting"
+puts "Finished setting up S3 static website hosting for #{domain_name}"
 puts "============================================="
-puts "Domain name: #{domain_name}"
-puts "Url: https://#{domain_name}"
-puts "S3 bucket: s3://#{domain_name}"
-puts "Name servers:"
-name_servers.map { |server| puts "#{server}\n" }
-puts "\n\n\n"
+puts "Upload your website's code to the S3 bucket: s3://#{domain_name}"
+puts "Then, configure you DNS provider to point to these name servers:"
+name_servers.map { |server| puts server }
+puts "Once done, your website can be reached at: https://#{domain_name}"

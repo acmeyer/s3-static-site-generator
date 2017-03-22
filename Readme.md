@@ -59,6 +59,7 @@ If you would like to remove your website from S3, all you have to do is run the 
 - [ ] Add script to remove site
 - [ ] Handle unable S3 bucket names
 - [ ] Handle script errors
+- [ ] Handle multiple runs on same domain name
 - [ ] Add automatic uploading of website code
 - [ ] Add domain name registration
 

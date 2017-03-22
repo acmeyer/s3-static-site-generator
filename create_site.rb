@@ -6,15 +6,6 @@ acm = Aws::ACM::Client.new()
 s3 = Aws::S3::Client.new()
 cloudfront = Aws::CloudFront::Client.new()
 
-# For waiting
-def loading(times)
-  pinwheel = %w{| / - \\}
-  times.times do
-    print "\b" + pinwheel.rotate!.first
-    sleep(0.1)
-  end
-end
-
 # Get domain name from passed in arguments
 domain_name = ARGV[0]
 
@@ -217,14 +208,21 @@ www_distribution_url = cloudfront_www_domain_resp.distribution.domain_name
 puts "Finished creating distributions."
 puts "--------------------------------"
 print "Deploying distributions, this may take awhile (around 15 minutes)...."
+def spinner
+  pinwheel = %w{| / - \\}
+  600.times do
+    print "\b" + pinwheel.rotate!.first
+    sleep(0.1)
+  end
+end
 cloudfront.wait_until(:distribution_deployed, id: cloudfront_root_domain_resp.distribution.id) do |w|
   w.before_wait do |attempts, response|
-    loading 6000
+    spinner
   end
 end
 cloudfront.wait_until(:distribution_deployed, id: cloudfront_www_domain_resp.distribution.id) do |w|
   w.before_wait do |attempts, response|
-    loading 6000
+    spinner
   end
 end
 puts "\nDistributions deployed."
@@ -276,6 +274,6 @@ puts "\n\n\n"
 puts "Finished setting up S3 static website hosting for #{domain_name}"
 puts "============================================="
 puts "Upload your website's code to the S3 bucket: s3://#{domain_name}"
-puts "Then, configure you DNS provider to point to these name servers:"
+puts "Then, configure your DNS provider to point to these name servers:"
 name_servers.map { |server| puts server }
 puts "Once done, your website can be reached at: https://#{domain_name}"

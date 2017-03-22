@@ -277,3 +277,4 @@ puts "Upload your website's code to the S3 bucket: s3://#{domain_name}"
 puts "Then, configure your DNS provider to point to these name servers:"
 name_servers.map { |server| puts server }
 puts "Once done, your website can be reached at: https://#{domain_name}"
+puts "Note: it can take some time before your DNS servers will point to the new site."

@@ -160,10 +160,6 @@ cloudfront_www_domain_resp = cloudfront.create_distribution({
       items: [
         {
           id: "S3-Website-www.#{domain_name}", # required
-          # domain_name: "www.#{domain_name}.s3.amazonaws.com", # required
-          # s3_origin_config: {
-          #   origin_access_identity: "", # required
-          # },
           domain_name: "www.#{domain_name}.s3-website-us-east-1.amazonaws.com",
           custom_origin_config: {
             http_port: 80, # required

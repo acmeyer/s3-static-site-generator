@@ -38,7 +38,7 @@ That's it!
 
 The script will run and let you know it's progress. It can take up to 20 minutes to complete. Go grab yourself a much deserved coffee!
 
-When it's finished, it will print the url of your site, the S3 bucket to upload your website code to, and the name servers to point your DNS to. You'll have to point your DNS name servers to these name servers in order to see your site when accessing it's url.
+When it's finished, it will print the url of your site, the S3 bucket to upload your website code to, and the name servers to point your DNS to. You'll have to point your DNS name servers to these name servers in order to see your site when accessing it's url. This also may take some time before you can access your site.
 
 <!-- ## How to Remove
 
@@ -57,11 +57,11 @@ If you would like to remove your website from S3, all you have to do is run the 
 ## TODOs
 
 - [ ] Add script to remove site
-- [ ] Handle unable S3 bucket names
+- [ ] Handle S3 bucket names not available
+- [ ] Handle non-root domain name
 - [ ] Handle script errors
 - [ ] Handle multiple runs on same domain name
 - [ ] Add automatic uploading of website code
-- [ ] Add domain name registration
 
 
 ## License

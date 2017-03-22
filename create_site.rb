@@ -160,9 +160,19 @@ cloudfront_www_domain_resp = cloudfront.create_distribution({
       items: [
         {
           id: "S3-Website-www.#{domain_name}", # required
-          domain_name: "www.#{domain_name}.s3.amazonaws.com", # required
-          s3_origin_config: {
-            origin_access_identity: "", # required
+          # domain_name: "www.#{domain_name}.s3.amazonaws.com", # required
+          # s3_origin_config: {
+          #   origin_access_identity: "", # required
+          # },
+          domain_name: "www.#{domain_name}.s3-website-us-east-1.amazonaws.com",
+          custom_origin_config: {
+            http_port: 80, # required
+            https_port: 443, # required
+            origin_protocol_policy: "http-only", # required, accepts http-only, match-viewer, https-only
+            origin_ssl_protocols: {
+              quantity: 3, # required
+              items: ["TLSv1", "TLSv1.1", "TLSv1.2"], # required, accepts SSLv3, TLSv1, TLSv1.1, TLSv1.2
+            },
           },
         },
       ],
@@ -207,22 +217,15 @@ cloudfront_www_domain_resp = cloudfront.create_distribution({
 www_distribution_url = cloudfront_www_domain_resp.distribution.domain_name
 puts "Finished creating distributions."
 puts "--------------------------------"
-print "Deploying distributions, this may take awhile (around 15 minutes)...."
-def spinner
-  pinwheel = %w{| / - \\}
-  600.times do
-    print "\b" + pinwheel.rotate!.first
-    sleep(0.1)
-  end
-end
+print "Deploying distributions, this may take awhile (around 15 minutes)..."
 cloudfront.wait_until(:distribution_deployed, id: cloudfront_root_domain_resp.distribution.id) do |w|
   w.before_wait do |attempts, response|
-    spinner
+    print "."
   end
 end
 cloudfront.wait_until(:distribution_deployed, id: cloudfront_www_domain_resp.distribution.id) do |w|
   w.before_wait do |attempts, response|
-    spinner
+    print "."
   end
 end
 puts "\nDistributions deployed."
